@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "14.2.5",
-    "react": "^18",
-    "react-dom": "^18"
+    "@headlessui/react": "^2.1.2",
+    "@heroicons/react": "^2.1.5",
+    "next": "15.0.0-rc.0",
+    "react": "19.0.0-rc-1d989965-20240821",
+    "react-dom": "19.0.0-rc-1d989965-20240821"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
