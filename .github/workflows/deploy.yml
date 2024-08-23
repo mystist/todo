@@ -66,15 +66,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
+      - name: Replace placeholders in task definition
+        env:
+          AWS_ECS_TASK_DEFINITION_ARN: ${{ secrets.AWS_ECS_TASK_DEFINITION_ARN }}
+        run: |
+          sed -i 's|${AWS_ECS_TASK_DEFINITION_ARN}|'"$AWS_ECS_TASK_DEFINITION_ARN"'|' task-definition.json
+
+      - name: Render Amazon ECS task definition
+        id: render-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          task-definition: task-definition.json
           container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-        env:
-          AWS_TASK_EXECUTION_ROLE_ARN: ${{ secrets.AWS_TASK_EXECUTION_ROLE_ARN }}
+          image: ${{ steps.meta.outputs.tags }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
