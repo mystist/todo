@@ -12,6 +12,7 @@ env:
   ECS_CLUSTER: todo-cluster
   ECS_SERVICE: todo-service
   ECS_TASK_DEFINITION: .github/workflows/task-definition.json
+  CONTAINER_NAME: todo
 
 jobs:
   build-and-push:
@@ -70,8 +71,10 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          container-name: todo
+          container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        env:
+          AWS_TASK_EXECUTION_ROLE_ARN: ${{ secrets.AWS_TASK_EXECUTION_ROLE_ARN }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
