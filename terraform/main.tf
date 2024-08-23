@@ -291,6 +291,26 @@ resource "aws_ecs_task_definition" "main" {
           awslogs-stream-prefix = "lb"
         }
       }
+    },
+    {
+      name  = "todo"
+      image = var.app_image
+      portMappings = [
+        {
+          containerPort = var.app_port
+          hostPort      = var.app_port
+        }
+      ]
+      essential = true
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/${var.project_name}"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "todo-app"
+        }
+      }
     }
   ])
 
@@ -346,6 +366,7 @@ resource "aws_ecs_service" "todo_service" {
   network_configuration {
     subnets          = aws_subnet.public[*].id
     security_groups  = [aws_security_group.ecs_tasks.id]
+    assign_public_ip = true
   }
 
   service_registries {
