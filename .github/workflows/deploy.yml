@@ -66,11 +66,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Replace placeholders in task definition
+      - name: Replace AWS account ID in task definition
         env:
-          AWS_ECS_TASK_DEFINITION_ARN: ${{ secrets.AWS_ECS_TASK_DEFINITION_ARN }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
         run: |
-          sed -i 's|${AWS_ECS_TASK_DEFINITION_ARN}|'"$AWS_ECS_TASK_DEFINITION_ARN"'|' task-definition.json
+          sed -i 's|${AWS_ACCOUNT_ID}|'"$AWS_ACCOUNT_ID"'|' task-definition.json
 
       - name: Render Amazon ECS task definition
         id: render-task-def

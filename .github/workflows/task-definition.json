@@ -4,7 +4,7 @@
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
   "memory": "512",
-  "executionRoleArn": "${AWS_ECS_TASK_DEFINITION_ARN}",
+  "executionRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID}:role/todo-ecs-task-execution-role",
   "containerDefinitions": [
     {
       "name": "todo",
