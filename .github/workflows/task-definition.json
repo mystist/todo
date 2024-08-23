@@ -7,23 +7,12 @@
   "executionRoleArn": "${AWS_TASK_EXECUTION_ROLE_ARN}",
   "containerDefinitions": [
     {
-      "name": "lb",
+      "name": "todo",
       "image": "PLACEHOLDER_IMAGE",
       "portMappings": [
         {
-          "containerPort": 80,
-          "hostPort": 80
-        },
-        {
-          "containerPort": 443,
-          "hostPort": 443
-        }
-      ],
-      "mountPoints": [
-        {
-          "sourceVolume": "cert-storage",
-          "containerPath": "/etc/certs",
-          "readOnly": true
+          "containerPort": 3000,
+          "hostPort": 3000
         }
       ],
       "essential": true,
@@ -32,17 +21,8 @@
         "options": {
           "awslogs-group": "/ecs/todo",
           "awslogs-region": "ap-east-1",
-          "awslogs-stream-prefix": "lb"
+          "awslogs-stream-prefix": "app"
         }
-      }
-    }
-  ],
-  "volumes": [
-    {
-      "name": "cert-storage",
-      "efsVolumeConfiguration": {
-        "fileSystemId": "${AWS_EFS_ID}",
-        "rootDirectory": "/"
       }
     }
   ]
