@@ -71,7 +71,7 @@ jobs:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_GITHUB_PAT_ARN_ID: ${{ secrets.AWS_GITHUB_PAT_ARN_ID }}
         run: |
-          sed -i 's|${AWS_ACCOUNT_ID}|'"$AWS_ACCOUNT_ID"'|' ${{ env.ECS_TASK_DEFINITION }}
+          sed -i 's|${AWS_ACCOUNT_ID}|'"$AWS_ACCOUNT_ID"'|' ${{ env.AWS_ACCOUNT_ID }}
           sed -i 's|${AWS_GITHUB_PAT_ARN_ID}|'"$AWS_GITHUB_PAT_ARN_ID"'|' ${{ env.AWS_GITHUB_PAT_ARN_ID }}
 
       - name: Render Amazon ECS task definition
