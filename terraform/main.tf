@@ -282,7 +282,12 @@ resource "aws_ecs_task_definition" "main" {
         }
       ]
       essential = true
-
+      secrets = [
+        {
+          name      = "GITHUB_PAT"
+          valueFrom = data.aws_secretsmanager_secret.github_pat.arn
+        }
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -395,6 +400,31 @@ resource "aws_iam_role" "ecs_task_execution_role" {
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
   role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+resource "aws_iam_role_policy" "ecs_task_execution_secrets_policy" {
+  name = "${var.project_name}-ecs-task-secrets-policy"
+  role = aws_iam_role.ecs_task_execution_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+        Resource = [
+          data.aws_secretsmanager_secret.github_pat.arn
+        ]
+      }
+    ]
+  })
+}
+
+# secret
+data "aws_secretsmanager_secret" "github_pat" {
+  name = "github-pat"
 }
 
 # cloudwatch
