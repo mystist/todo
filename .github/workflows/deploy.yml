@@ -9,9 +9,9 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   AWS_REGION: ap-east-1
-  ECS_CLUSTER: todo-cluster
-  ECS_SERVICE: todo-service
+  ECS_CLUSTER: application-cluster
   ECS_TASK_DEFINITION: .github/workflows/task-definition.json
+  ECS_SERVICE: todo-service
   CONTAINER_NAME: todo
 
 jobs:
@@ -68,12 +68,12 @@ jobs:
 
       - name: Replace AWS account ID in task definition
         env:
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_GITHUB_PAT_ARN_ID: ${{ secrets.AWS_GITHUB_PAT_ARN_ID }}
           ECS_TASK_DEFINITION: ${{ env.ECS_TASK_DEFINITION }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_GITHUB_PAT_SECRET_NAME: ${{ secrets.AWS_GITHUB_PAT_SECRET_NAME }}
         run: |
           sed -i 's|${AWS_ACCOUNT_ID}|'"$AWS_ACCOUNT_ID"'|' $ECS_TASK_DEFINITION
-          sed -i 's|${AWS_GITHUB_PAT_ARN_ID}|'"$AWS_GITHUB_PAT_ARN_ID"'|' $ECS_TASK_DEFINITION
+          sed -i 's|${AWS_GITHUB_PAT_SECRET_NAME}|'"$AWS_GITHUB_PAT_SECRET_NAME"'|' $ECS_TASK_DEFINITION
 
       - name: Render Amazon ECS task definition
         id: render-task-def
