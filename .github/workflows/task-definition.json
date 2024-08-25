@@ -1,33 +1,30 @@
 {
-  "family": "todo-task",
+  "family": "application-task",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
   "memory": "512",
-  "executionRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID}:role/todo-ecs-task-execution-role",
+  "executionRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID}:role/application-ecs-task-execution-role",
   "containerDefinitions": [
     {
       "name": "todo",
       "image": "PLACEHOLDER_IMAGE",
+      "repositoryCredentials": {
+        "credentialsParameter": "arn:aws:secretsmanager:ap-east-1:${AWS_ACCOUNT_ID}:secret:${AWS_GITHUB_PAT_SECRET_NAME}"
+      },
       "portMappings": [
         {
           "containerPort": 3000,
           "hostPort": 3000
         }
       ],
-      "secrets": [
-        {
-          "name": "GITHUB_PAT",
-          "valueFrom": "arn:aws:secretsmanager:ap-east-1:${AWS_ACCOUNT_ID}:secret:${AWS_GITHUB_PAT_ARN_ID}"
-        }
-      ],
       "essential": true,
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/todo",
+          "awslogs-group": "/ecs/application",
           "awslogs-region": "ap-east-1",
-          "awslogs-stream-prefix": "app"
+          "awslogs-stream-prefix": "todo"
         }
       }
     }
