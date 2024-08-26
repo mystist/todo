@@ -33,11 +33,7 @@ export const deleteTodo = async (id: number) => {
 }
 
 export const setTodoStatus = async (todo: any, status: string) => {
-  console.log(new Date().toISOString())
   const instance = await getInstance()
-  console.log('sss')
-  console.log(todo.id)
-  console.log(status)
   await instance.updateTodo(todo.id, { status })
 
   revalidatePath('/todo-list')
